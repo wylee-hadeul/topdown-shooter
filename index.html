@@ -153,20 +153,15 @@
 	</div>
 
 	<script type='text/javascript'>
-	// Patch AudioContext for in-app browsers (KakaoTalk, etc.)
 	(function() {
 		var Ctx = window.AudioContext || window.webkitAudioContext;
 		if (!Ctx) return;
 		var OrigCtx = Ctx;
 		function PatchedCtx() {
 			var ctx = new OrigCtx();
-			if (ctx.state === 'running') {
-				try { ctx.suspend(); } catch(e) {}
-			}
+			if (ctx.state === 'running') { try { ctx.suspend(); } catch(e) {} }
 			function resumeAudio() {
-				if (ctx.state === 'suspended') {
-					ctx.resume().catch(function(){});
-				}
+				if (ctx.state === 'suspended') ctx.resume().catch(function(){});
 				document.removeEventListener('touchstart', resumeAudio);
 				document.removeEventListener('touchend', resumeAudio);
 				document.removeEventListener('click', resumeAudio);
