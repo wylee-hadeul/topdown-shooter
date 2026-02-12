@@ -114,6 +114,14 @@ body {
 		<button id="open-browser-btn" onclick="window.open(location.href, '_system')">외부 브라우저로 열기</button>
 
 		<script>
+// Force non-streaming WASM compile for in-app browsers (KakaoTalk WebView)
+WebAssembly.instantiateStreaming = undefined;
+
+// Bypass cross-origin isolation internal checks
+if (!window.crossOriginIsolated) {
+	window.crossOriginIsolated = false;
+}
+
 // Patch AudioContext for in-app browsers (KakaoTalk, etc.)
 // Defer AudioContext.resume() until first user gesture to prevent silent hang
 (function() {
